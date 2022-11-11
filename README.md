@@ -2,7 +2,6 @@
 
 <p align="center"> A COS SDK.</p>
 
-
 ## Installing
 
 1. Install package:
