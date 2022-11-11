@@ -1,10 +1,10 @@
 {
-    "name": "lk\/laravel-cos-slice",
+    "name": "laungkahung\/laravel-cos-slice",
     "description": "A COS SLICE SDK",
     "license": "MIT",
     "authors": [
         {
-            "name": "lk",
+            "name": "laungkahung",
             "email": "laungkahung@gmail.com"
         }
     ],
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Lk\\LaravelCosSlice\\": "src"
+            "Laungkahung\\LaravelCosSlice\\": "src"
         }
     },
     "require-dev": {
