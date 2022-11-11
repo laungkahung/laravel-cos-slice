@@ -2,8 +2,8 @@
 
 namespace Laungkahung\LaravelCosSlice\Http\Controllers;
 
-use Laungkahung\LaravelCosSlice\Requests\SliceUploadDoneRequest;
-use App\Http\Requests\SliceUploadRequest;
+use Laungkahung\LaravelCosSlice\Http\Requests\SliceUploadDoneRequest;
+use Laungkahung\LaravelCosSlice\Http\Requests\SliceUploadRequest;
 use Laungkahung\LaravelCosSlice\SliceUploaded;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laungkahung\LaravelCosSlice\Requests;
+namespace Laungkahung\LaravelCosSlice\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use JetBrains\PhpStorm\ArrayShape;

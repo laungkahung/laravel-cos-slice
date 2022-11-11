@@ -1,6 +1,6 @@
 <?php
 
-namespace Overtrue\LaravelUploader;
+namespace Laungkahung\LaravelCosSlice;
 
 use Illuminate\Support\ServiceProvider;
 

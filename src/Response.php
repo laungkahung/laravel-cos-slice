@@ -6,7 +6,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use JetBrains\PhpStorm\Pure;
 
 class Response implements Jsonable, Arrayable
 {
@@ -69,7 +68,7 @@ class Response implements Jsonable, Arrayable
     /**
      * @return array
      */
-    #[Pure] public function toArray(): array
+    public function toArray(): array
     {
         return [
             'mime' => $this->mime,
