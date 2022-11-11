@@ -16,5 +16,25 @@
         "psr-4": {
             "Laungkahung\\LaravelCosSlice\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "\\Laungkahung\\LaravelCosSlice\\UploadServiceProvider"
+            ],
+            "aliases": {
+                "LaravelUploader": "\\Laungkahung\\LaravelCosSlice\\LaravelUploader"
+            }
+        },
+        "hooks": {
+            "pre-commit": [
+                "composer test",
+                "composer check-style"
+            ],
+            "pre-push": [
+                "composer test",
+                "composer fix-style"
+            ]
+        }
     }
 }

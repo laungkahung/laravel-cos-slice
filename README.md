@@ -4,7 +4,8 @@
 
 # Requirement
 
--   Laravel >= 9.0
+-   Laravel >= 9.0 
+-   PHP >= 8.0.2
 
 # Installing
 
@@ -37,39 +38,39 @@
 
 1. Add a new disk to your `config/filesystems.php` config:
 
-```php
-<?php
-
-return [
-   'disks' => [
-       //...
-       'cos' => [
-           'driver' => 'cos',
-
-           'app_id'     => env('COS_APP_ID'),
-           'secret_id'  => env('COS_SECRET_ID'),
-           'secret_key' => env('COS_SECRET_KEY'),
-           'region'     => env('COS_REGION', 'ap-guangzhou'),
-
-           'bucket'     => env('COS_BUCKET'),  // 不带数字 app_id 后缀
-           'cdn'        => env('COS_CDN'),
-           'signed_url' => false,
-
-           'prefix' => env('COS_PATH_PREFIX'), // 全局路径前缀
-
-           'guzzle' => [
-               'timeout' => env('COS_TIMEOUT', 60),
-               'connect_timeout' => env('COS_CONNECT_TIMEOUT', 60),
+    ```php
+    <?php
+    
+    return [
+       'disks' => [
+           //...
+           'cos' => [
+               'driver' => 'cos',
+    
+               'app_id'     => env('COS_APP_ID'),
+               'secret_id'  => env('COS_SECRET_ID'),
+               'secret_key' => env('COS_SECRET_KEY'),
+               'region'     => env('COS_REGION', 'ap-guangzhou'),
+    
+               'bucket'     => env('COS_BUCKET'),  // 不带数字 app_id 后缀
+               'cdn'        => env('COS_CDN'),
+               'signed_url' => false,
+    
+               'prefix' => env('COS_PATH_PREFIX'), // 全局路径前缀
+    
+               'guzzle' => [
+                   'timeout' => env('COS_TIMEOUT', 60),
+                   'connect_timeout' => env('COS_CONNECT_TIMEOUT', 60),
+               ],
            ],
-       ],
-       //...
-    ]
-];
-```
-
-> 🚨 请注意：example-1230000001.cos.ap-guangzhou.mycloud.com
->
-> 其中：**bucket**: example, **app_id**: 1230000001, **region**: ap-guangzhou
+           //...
+        ]
+    ];
+    ```
+    
+    > 🚨 请注意：example-1230000001.cos.ap-guangzhou.mycloud.com
+    >
+    > 其中：**bucket**: example, **app_id**: 1230000001, **region**: ap-guangzhou
 
 # Usage
 
@@ -97,6 +98,8 @@ $contents = $disk->read('folder/my_file.txt');
 ```
 
 [Full API documentation.](http://flysystem.thephpleague.com/api/)
+
+## Project supported by [overtrue](https://github.com/overtrue)
 
 ## Contributing
 
