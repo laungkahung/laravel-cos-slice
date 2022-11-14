@@ -87,7 +87,7 @@ class Strategy
     {
         return match ($this->filenameType) {
             'original' => $this->file->getClientOriginalName(),
-            'md5_file' => md5_file($this->file->getRealPath()) . 'laravel-cos-slice' . $this->file->getClientOriginalExtension(),
+            'md5_file' => md5_file($this->file->getRealPath()) . '.' . $this->file->getClientOriginalExtension(),
             default => $this->file->hashName(),
         };
     }
@@ -102,8 +102,8 @@ class Strategy
 
         return match ($this->filenameType) {
             'original' => $options['original_name'],
-            'md5_file' => md5_file($options['path']) . 'laravel-cos-slice' . $options['extension'],
-            default => Str::random(40) . 'laravel-cos-slice' . $options['extension'],
+            'md5_file' => md5_file($options['path']) . '.' . $options['extension'],
+            default => Str::random(40) . '.' . $options['extension'],
         };
     }
 

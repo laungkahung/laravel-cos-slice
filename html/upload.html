@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      #progress {
+        width: 300px;
+        height: 20px;
+        background-color: #f7f7f7;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        background-image: linear-gradient(to bottom, #f5f5f5, #f9f9f9);
+      }
+
+      #finish {
+        background-color: #149bdf;
+        background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.15) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.15) 50%,
+          rgba(255, 255, 255, 0.15) 75%,
+          transparent 75%,
+          transparent
+        );
+        background-size: 40px 40px;
+        display: inline-block;
+        height: 20px;
+      }
+
+      form {
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="progress">
+      <span id="finish" style="width: 0%" progress="0"></span>
+    </p>
+    <form action="">
+      <input type="file" name="file" id="file" />
+      <input type="button" value="停止" id="stop" />
+    </form>
+    <script>
+      var fileForm = document.getElementById("file");
+      var stopBtn = document.getElementById("stop");
+      var upload = new Upload();
+
+      fileForm.onchange = function () {
+        upload.addFileAndSend(this);
+      };
+
+      stopBtn.onclick = function () {
+        this.value = "停止中";
+        upload.stop();
+        this.value = "已停止";
+      };
+
+      function Upload() {
+        var xhr = new XMLHttpRequest();
+        const LENGTH = 1024 * 1024 * 2;
+        var start = 0;
+        var end = start + LENGTH;
+        var blob;
+        var blob_num = 1;
+        var is_stop = 0;
+        var uuid = generateUUID();
+        var original_name;
+        var size;
+        var total_size;
+        var mime;
+
+        function generateUUID() {
+          var d = new Date().getTime();
+          var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+            /[xy]/g,
+            function (c) {
+              var r = (d + Math.random() * 16) % 16 | 0;
+              d = Math.floor(d / 16);
+              return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+            }
+          );
+          return uuid;
+        }
+
+        //对外方法，传入文件对象
+        this.addFileAndSend = function (that) {
+          var file = that.files[0];
+          original_name = file.name;
+          console.log(that.files);
+          size = file.size;
+
+          if (size > LENGTH) {
+            blob = cutFile(file);
+          } else {
+            blob = file;
+          }
+          sendFile(blob, file);
+          blob_num += 1;
+        };
+
+        //停止文件上传
+        this.stop = function () {
+          xhr.abort();
+          is_stop = 1;
+        };
+
+        //切割文件
+        function cutFile(file) {
+          var file_blob = file.slice(start, end);
+          start = end;
+          end = start + LENGTH;
+          return file_blob;
+        }
+
+        //发送文件
+        function sendFile(blob, file) {
+          var form_data = new FormData();
+          var total_blob_num = Math.ceil(file.size / LENGTH);
+
+          form_data.append("file", blob);
+          form_data.append("required_id", uuid);
+          form_data.append("blob_num", Number(blob_num));
+          form_data.append("total_blob_num", Number(total_blob_num));
+          form_data.append("original_name", original_name);
+
+          xhr.open(
+            "POST",
+            "http://localhost:8000/api/files/slice-upload",
+            false
+          );
+          xhr.setRequestHeader(
+            "Authorization",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsInVzZXJfbmFtZSI6ImFkbWluaXN0cmF0b3IiLCJleHBpcmVfdGltZSI6MTY1NzU5NTg1NSwiZXhwIjoxNjU3NTk1ODU1LCJpYXQiOjE2NTI0MTE4NTUsImlzcyI6IkZkIiwibmJmIjoxNjUyNDExODU1fQ"
+          );
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              console.log(xhr.responseText);
+            }
+            var progress;
+            var progressObj = document.getElementById("finish");
+            if (total_blob_num === 1) {
+              progress = "100%";
+            } else {
+              progress = Math.min(100, (blob_num / total_blob_num) * 100) + "%";
+              // console.log(progress);
+              // console.log('分割');
+            }
+            if (progress === "100%") {
+              is_stop = 1;
+            }
+            progressObj.style.width = progress;
+            var t = setTimeout(function () {
+              if (start < file.size && is_stop === 0) {
+                blob = cutFile(file);
+                sendFile(blob, file);
+                blob_num += 1;
+              } else {
+                setTimeout(t);
+              }
+            }, 1000);
+          };
+          xhr.send(form_data);
+        }
+      }
+    </script>
+  </body>
+</html>

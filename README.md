@@ -74,6 +74,28 @@
 
 # Usage
 
+```html
+// 发送文件 html文件在根目录html/upload.html
+function sendFile(blob, file) {
+  var form_data = new FormData();
+  var total_blob_num = Math.ceil(file.size / LENGTH);
+
+  form_data.append("file", blob);
+  form_data.append("required_id", uuid);
+  form_data.append("blob_num", Number(blob_num));
+  form_data.append("total_blob_num", Number(total_blob_num));
+  form_data.append("original_name", original_name);
+
+  xhr.open(
+    "POST",
+    "http://localhost:8000/api/files/slice-upload",
+    false
+  );
+
+    ....
+}
+```
+
 ```php
 $disk = Storage::disk('cos');
 
